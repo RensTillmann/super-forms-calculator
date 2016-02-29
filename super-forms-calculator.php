@@ -150,7 +150,8 @@ if(!class_exists('SUPER_Calculator')) :
             if ( $this->is_request( 'frontend' ) ) {
                 
                 // Filters since 1.0.0
-            	add_filter( 'super_form_styles_filter', array( $this, 'add_element_styles' ), 10, 2 );
+                add_filter( 'super_form_styles_filter', array( $this, 'add_element_styles' ), 10, 2 );
+                add_filter( 'super_common_js_dynamic_functions_filter', array( $this, 'add_dynamic_function' ), 10, 2 );
 
                 // Actions since 1.0.0
                 
@@ -177,7 +178,20 @@ if(!class_exists('SUPER_Calculator')) :
             
         }
 
-        
+
+        /**
+         * Hook into stylesheets of the form and add styles for the calculator element
+         *
+         *  @since      1.0.0
+        */
+        public static function add_dynamic_function( $functions ) {
+            $functions[] = array(
+                'name' => 'init_calculator'
+            );
+            return $functions;
+        }
+
+
         /**
          * Hook into stylesheets of the form and add styles for the calculator element
          *
@@ -259,9 +273,7 @@ if(!class_exists('SUPER_Calculator')) :
         */
         public static function calculator( $tag, $atts ) {
         	wp_enqueue_style( 'super-calculator', plugin_dir_url( __FILE__ ) . 'assets/css/frontend/calculator.min.css', array(), SUPER_VERSION );
-            wp_enqueue_script( 'super-jquery-touch-punch', plugin_dir_url( __FILE__ ) . 'assets/js/frontend/jquery.ui.touch-punch.min.js', array( 'jquery', 'jquery-ui-widget', 'jquery-ui-mouse' ), SUPER_VERSION );
-            wp_enqueue_script( 'super-jquery-calculator', plugin_dir_url( __FILE__ ) . 'assets/js/frontend/jquery.calculator.js', array( 'jquery', 'jquery-ui-mouse' ), SUPER_VERSION );
-			wp_enqueue_script( 'super-calculator', plugin_dir_url( __FILE__ ) . 'assets/js/frontend/calculator.min.js', array( 'super-jquery-calculator' ), SUPER_VERSION );
+			wp_enqueue_script( 'super-calculator', plugin_dir_url( __FILE__ ) . 'assets/js/frontend/calculator.min.js', array( 'jquery' ), SUPER_VERSION );
 			$result = SUPER_Shortcodes::opening_tag( $tag, $atts );
 	        $result .= SUPER_Shortcodes::opening_wrapper( $atts );
 	        if( ( !isset( $atts['value'] ) ) || ( $atts['value']=='' ) ) {
@@ -269,22 +281,15 @@ if(!class_exists('SUPER_Calculator')) :
 	        }else{
 	            $atts['value'] = SUPER_Common::email_tags( $atts['value'] );
 	        }
-	        $styles = '';
-	        if( !isset( $atts['height'] ) ) $atts['height'] = 100;
-	        if( !isset( $atts['bg_size'] ) ) $atts['bg_size'] = 75;
-	        if( !isset( $atts['background_img'] ) ) $atts['background_img'] = 0;
-	        $image = wp_prepare_attachment_for_js( $atts['background_img'] );
-            if( $image==null ) $image['url'] = plugin_dir_url( __FILE__ ) . 'assets/images/sign-here.png';
-	        $styles .= 'height:' . $atts['height'] . 'px;';
-	        $styles .= 'background-image:url(\'' . $image['url'] . '\');';
-	        $styles .= 'background-size:' . $atts['bg_size'] . 'px;';
-	        $result .= '<div class="super-calculator-canvas" style="' . $styles . '"></div>';
-	        $result .= '<span class="super-calculator-clear"></span>';
-	        $result .= '<textarea style="display:none;" class="super-shortcode-field"';
+	        $result .= '<div class="super-calculator-wrapper" data-super-math="{total_persons_nasi}+{total_persons_gado}">';
+            $result .= '<span class="super-calculator-currency">$</span>';
+            $result .= '<span class="super-calculator-amount">10</span>';
+            $result .= '</div>';
+	        $result .= '<input type="hidden" class="super-shortcode-field"';
 	        $result .= ' name="' . $atts['name'] . '"';
-	        $result .= ' data-thickness="' . $atts['thickness'] . '"';
 	        $result .= SUPER_Shortcodes::common_attributes( $atts, $tag );
-	        $result .= ' />' . $atts['value'] . '</textarea>';
+	        $result .= ' />';
+            // . $atts['value'] . '</textarea>';
 	        $result .= '</div>';
 	        $result .= SUPER_Shortcodes::loop_conditions( $atts );
 	        $result .= '</div>';
@@ -306,7 +311,7 @@ if(!class_exists('SUPER_Calculator')) :
 	        $array['form_elements']['shortcodes']['calculator'] = array(
 	            'callback' => 'SUPER_Calculator::calculator',
 	            'name' => __( 'Calculator', 'super' ),
-	            'icon' => 'pencil-square-o',
+	            'icon' => 'calculator',
 	            'atts' => array(
 	                'general' => array(
 	                    'name' => __( 'General', 'super' ),
@@ -344,7 +349,7 @@ if(!class_exists('SUPER_Calculator')) :
 	                    'fields' => array(
 	                        'icon_position' => $icon_position,
 	                        'icon_align' => $icon_align,
-	                        'icon' => SUPER_Shortcodes::icon( $attributes, 'pencil' ),
+	                        'icon' => SUPER_Shortcodes::icon( $attributes, 'calculator' ),
 	                    ),
 	                ),
 	                'conditional_logic' => $conditional_logic_array
