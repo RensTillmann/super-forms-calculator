@@ -1,3 +1,7 @@
 .super-field.super-calculator .super-calculator-wrapper {
 	min-height: 33px;
+	line-height: 33px;
+}
+.super-field.super-calculator .super-calculator-wrapper > span {
+	font-size:20px;
 }

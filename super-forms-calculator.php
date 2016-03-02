@@ -185,7 +185,30 @@ if(!class_exists('SUPER_Calculator')) :
          *  @since      1.0.0
         */
         public static function add_dynamic_function( $functions ) {
-            $functions[] = array(
+            
+            /*
+            SUPER.before_validating_form_hook();
+            SUPER.after_validating_form_hook();
+            SUPER.after_initializing_forms_hook();
+            SUPER.after_dropdown_change_hook();
+            SUPER.after_field_change_blur_hook();
+            SUPER.after_radio_change_hook();
+            SUPER.after_checkbox_change_hook();
+            */
+
+            $functions['before_validating_form_hook'][] = array(
+                'name' => 'init_calculator'
+            );
+            $functions['after_dropdown_change_hook'][] = array(
+                'name' => 'init_calculator'
+            );
+            $functions['after_field_change_blur_hook'][] = array(
+                'name' => 'init_calculator'
+            );
+            $functions['after_radio_change_hook'][] = array(
+                'name' => 'init_calculator'
+            );
+            $functions['after_checkbox_change_hook'][] = array(
                 'name' => 'init_calculator'
             );
             return $functions;
@@ -276,14 +299,10 @@ if(!class_exists('SUPER_Calculator')) :
 			wp_enqueue_script( 'super-calculator', plugin_dir_url( __FILE__ ) . 'assets/js/frontend/calculator.min.js', array( 'jquery' ), SUPER_VERSION );
 			$result = SUPER_Shortcodes::opening_tag( $tag, $atts );
 	        $result .= SUPER_Shortcodes::opening_wrapper( $atts );
-	        if( ( !isset( $atts['value'] ) ) || ( $atts['value']=='' ) ) {
-	            $atts['value'] = '';
-	        }else{
-	            $atts['value'] = SUPER_Common::email_tags( $atts['value'] );
-	        }
-	        $result .= '<div class="super-calculator-wrapper" data-super-math="{total_persons_nasi}+{total_persons_gado}">';
-            $result .= '<span class="super-calculator-currency">$</span>';
-            $result .= '<span class="super-calculator-amount">10</span>';
+	        
+	        $result .= '<div class="super-calculator-wrapper" data-decimals="' . $atts['decimals'] . '" data-thousand-separator="' . $atts['thousand_separator'] . '" data-decimal-separator="' . $atts['decimal_separator'] . '" data-super-math="' . $atts['math'] . '">';
+            $result .= '<span class="super-calculator-currency">' . $atts['currency'] . '</span>';
+            $result .= '<span class="super-calculator-amount">' . number_format( 0, $atts['decimals'], $atts['decimal_separator'], '' ) . '</span>';
             $result .= '</div>';
 	        $result .= '<input type="hidden" class="super-shortcode-field"';
 	        $result .= ' name="' . $atts['name'] . '"';
@@ -316,8 +335,59 @@ if(!class_exists('SUPER_Calculator')) :
 	                'general' => array(
 	                    'name' => __( 'General', 'super' ),
 	                    'fields' => array(
-	                        'name' => SUPER_Shortcodes::name( $attributes, $default='calculator' ),
-	                        'email' => SUPER_Shortcodes::email( $attributes, $default='Calculator' ),
+                            'math' => array(
+                                'name'=>__( 'Calculation', 'super' ), 
+                                'desc'=>__( 'You can use tags to retrieve field values e.g: ({field1}+{field2})*7.5', 'super' ),
+                                'default'=> ( !isset( $attributes['math'] ) ? '' : $attributes['math'] ),
+                                'placeholder'=>'({field1}+{field2})*7.5',
+                                'required'=>true
+                            ),
+                            'currency' => array(
+                                'name'=>__( 'Currency', 'super' ), 
+                                'desc'=>__( 'Set the currency of or leave empty for no currency e.g: $ or €', 'super' ),
+                                'default'=> ( !isset( $attributes['currency'] ) ? '$' : $attributes['currency'] ),
+                                'placeholder'=>'$',
+                            ),
+                            'decimals' => array(
+                                'name'=>__( 'Length of decimal', 'super' ), 
+                                'desc'=>__( 'Choose a length for your decimals (default = 2)', 'super' ), 
+                                'default'=> (!isset($attributes['decimals']) ? '2' : $attributes['decimals']),
+                                'type'=>'select', 
+                                'values'=>array(
+                                    '0' => __( '0 decimals', 'super' ),
+                                    '1' => __( '1 decimal', 'super' ),
+                                    '2' => __( '2 decimals', 'super' ),
+                                    '3' => __( '3 decimals', 'super' ),
+                                    '4' => __( '4 decimals', 'super' ),
+                                    '5' => __( '5 decimals', 'super' ),
+                                    '6' => __( '6 decimals', 'super' ),
+                                    '7' => __( '7 decimals', 'super' ),
+                                )
+                            ),
+                            'decimal_separator' => array(
+                                'name'=>__( 'Decimal separator', 'super' ), 
+                                'desc'=>__( 'Choose your decimal separator (comma or dot)', 'super' ), 
+                                'default'=> (!isset($attributes['decimal_separator']) ? '.' : $attributes['decimal_separator']),
+                                'type'=>'select', 
+                                'values'=>array(
+                                    '.' => __( '. (dot)', 'super' ),
+                                    ',' => __( ', (comma)', 'super' ), 
+                                )
+                            ),
+                            'thousand_separator' => array(
+                                'name'=>__( 'Thousand separator', 'super' ), 
+                                'desc'=>__( 'Choose your thousand separator (empty, comma or dot)', 'super' ), 
+                                'default'=> (!isset($attributes['thousand_separator']) ? ',' : $attributes['thousand_separator']),
+                                'type'=>'select', 
+                                'values'=>array(
+                                    '' => __( 'None (empty)', 'super' ),
+                                    '.' => __( '. (dot)', 'super' ),
+                                    ',' => __( ', (comma)', 'super' ), 
+                                )
+                            ),
+
+                            'name' => SUPER_Shortcodes::name( $attributes, $default='subtotal' ),
+	                        'email' => SUPER_Shortcodes::email( $attributes, $default='Subtotal:' ),
 	                        'label' => $label,
 	                        'description'=>$description,
 				            'tooltip' => $tooltip,
@@ -338,8 +408,6 @@ if(!class_exists('SUPER_Calculator')) :
 	                    'name' => __( 'Advanced', 'super' ),
 	                    'fields' => array(
 	                        'grouped' => $grouped,
-	                        'width' => SUPER_Shortcodes::width( $attributes=null, $default=350, $min=0, $max=600, $steps=10, $name=null, $desc=null ),
-	                        'height' => SUPER_Shortcodes::width( $attributes=null, $default=100, $min=0, $max=600, $steps=10, $name=null, $desc=null ),
 	                        'exclude' => $exclude,
 	                        'error_position' => $error_position,
 	                    ),
