@@ -300,7 +300,12 @@ if(!class_exists('SUPER_Calculator')) :
 			$result = SUPER_Shortcodes::opening_tag( $tag, $atts );
 	        $result .= SUPER_Shortcodes::opening_wrapper( $atts );
 	        
-	        $result .= '<div class="super-calculator-wrapper" data-decimals="' . $atts['decimals'] . '" data-thousand-separator="' . $atts['thousand_separator'] . '" data-decimal-separator="' . $atts['decimal_separator'] . '" data-super-math="' . $atts['math'] . '">';
+            if( !isset( $atts['decimals'] ) ) $atts['decimals'] = 2;
+            if( !isset( $atts['thousand_separator'] ) ) $atts['thousand_separator'] = ',';
+            if( !isset( $atts['decimal_separator'] ) ) $atts['decimal_separator'] = '.';
+            if( !isset( $atts['math'] ) ) $atts['math'] = '';
+
+            $result .= '<div class="super-calculator-wrapper" data-decimals="' . $atts['decimals'] . '" data-thousand-separator="' . $atts['thousand_separator'] . '" data-decimal-separator="' . $atts['decimal_separator'] . '" data-super-math="' . $atts['math'] . '">';
             $result .= '<span class="super-calculator-currency">' . $atts['currency'] . '</span>';
             $result .= '<span class="super-calculator-amount">' . number_format( 0, $atts['decimals'], $atts['decimal_separator'], '' ) . '</span>';
             $result .= '</div>';
