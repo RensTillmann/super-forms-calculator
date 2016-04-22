@@ -195,7 +195,9 @@ if(!class_exists('SUPER_Calculator')) :
             SUPER.after_radio_change_hook();
             SUPER.after_checkbox_change_hook();
             */
-
+            $functions['after_initializing_forms_hook'][] = array(
+                'name' => 'init_calculator'
+            );
             $functions['before_validating_form_hook'][] = array(
                 'name' => 'init_calculator'
             );
