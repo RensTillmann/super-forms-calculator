@@ -154,7 +154,13 @@ if(!class_exists('SUPER_Calculator')) :
                 add_filter( 'super_common_js_dynamic_functions_filter', array( $this, 'add_dynamic_function' ), 10, 2 );
 
                 // Actions since 1.0.0
-                
+                $settings = get_option( 'super_settings' );
+                if( isset( $settings['enable_ajax'] ) ) {
+                    if( $settings['enable_ajax']=='1' ) {
+                        add_action( 'wp_enqueue_scripts', array( $this, 'load_frontend_scripts_before_ajax' ) );
+                    }
+                }
+
             }
             
             if ( $this->is_request( 'admin' ) ) {
@@ -176,6 +182,17 @@ if(!class_exists('SUPER_Calculator')) :
 
             }
             
+        }
+
+
+        /**
+         * Enqueue scripts before ajax call is made
+         *
+         *  @since      1.0.0
+        */
+        public static function load_frontend_scripts_before_ajax() {
+            wp_enqueue_style( 'super-calculator', plugin_dir_url( __FILE__ ) . 'assets/css/frontend/calculator.min.css', array(), SUPER_Calculator()->version );
+            wp_enqueue_script( 'super-calculator', plugin_dir_url( __FILE__ ) . 'assets/js/frontend/calculator.min.js', array( 'jquery', 'super-common', 'jquery-ui-mouse' ), SUPER_Calculator()->version );
         }
 
 
