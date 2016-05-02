@@ -415,6 +415,16 @@ if(!class_exists('SUPER_Calculator')) :
 	                    'name' => __( 'Advanced', 'super' ),
 	                    'fields' => array(
 	                        'grouped' => $grouped,
+                            'align' => array(
+                                'name'=> __('Alignment', 'super-forms' ),
+                                'default'=> ( !isset( $attributes['align']) ? 'left' : $attributes['align']),
+                                'type'=>'select', 
+                                'values'=>array(
+                                    'left' => 'Align Left', 
+                                    'center' => 'Align Center', 
+                                    'right' => 'Align Right', 
+                                ),
+                            ),
 	                        'exclude' => $exclude,
 	                        'error_position' => $error_position,
 	                    ),

@@ -5,3 +5,18 @@
 .super-field.super-calculator .super-calculator-wrapper > span {
 	font-size:20px;
 }
+.super-field.super-calculator.super-align-left {
+	text-align: left;
+}
+.super-field.super-calculator.super-align-center {
+	text-align: center;
+}
+.super-field.super-calculator.super-align-right {
+	text-align: right;
+}
+.super-field.super-calculator .super-field-wrapper {
+	float:initial;
+	margin:auto;
+	width:auto;
+	display: inline-block;
+}
