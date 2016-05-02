@@ -246,7 +246,7 @@ if(!class_exists('SUPER_Calculator')) :
             $array['super-calculator'] = array(
                 'src'     => $frontend_path . 'calculator' . $suffix . '.css',
                 'deps'    => '',
-                'version' => SUPER_VERSION,
+                'version' => SUPER_Calculator()->version,
                 'media'   => 'all',
                 'screen'  => array( 
                     'super-forms_page_super_create_form'
@@ -270,7 +270,7 @@ if(!class_exists('SUPER_Calculator')) :
             $array['super-jquery-calculator'] = array(
                 'src'     => $frontend_path . 'jquery.calculator.js',
                 'deps'    => array( 'jquery', 'jquery-ui-mouse' ),
-                'version' => SUPER_VERSION,
+                'version' => SUPER_Calculator()->version,
                 'footer'  => false,
                 'screen'  => array( 
                     'super-forms_page_super_create_form'
@@ -280,7 +280,7 @@ if(!class_exists('SUPER_Calculator')) :
             $array['super-calculator'] = array(
                 'src'     => $frontend_path . 'calculator' . $suffix . '.js',
                 'deps'    => array( 'super-jquery-calculator' ),
-                'version' => SUPER_VERSION,
+                'version' => SUPER_Calculator()->version,
                 'footer'  => false,
                 'screen'  => array( 
                     'super-forms_page_super_create_form'
@@ -296,26 +296,41 @@ if(!class_exists('SUPER_Calculator')) :
          *
          *  @since      1.0.0
         */
-        public static function calculator( $tag, $atts ) {
-        	wp_enqueue_style( 'super-calculator', plugin_dir_url( __FILE__ ) . 'assets/css/frontend/calculator.min.css', array(), SUPER_VERSION );
-			wp_enqueue_script( 'super-calculator', plugin_dir_url( __FILE__ ) . 'assets/js/frontend/calculator.min.js', array( 'jquery' ), SUPER_VERSION );
-			$result = SUPER_Shortcodes::opening_tag( $tag, $atts );
-	        $result .= SUPER_Shortcodes::opening_wrapper( $atts );
-	        
+        public static function calculator( $tag, $atts, $inner, $shortcodes=null, $settings=null ) {
+        	wp_enqueue_style( 'super-calculator', plugin_dir_url( __FILE__ ) . 'assets/css/frontend/calculator.min.css', array(), SUPER_Calculator()->version );
+			wp_enqueue_script( 'super-calculator', plugin_dir_url( __FILE__ ) . 'assets/js/frontend/calculator.min.js', array( 'jquery' ), SUPER_Calculator()->version );
+            $class = ''; 
+            if( !isset( $atts['margin'] ) ) $atts['margin'] = '';
+            if($atts['margin']!=''){
+                $class = 'super-remove-margin'; 
+            }
+            $result = SUPER_Shortcodes::opening_tag( $tag, $atts, $class );
+	        $result .= SUPER_Shortcodes::opening_wrapper( $atts, $inner, $shortcodes, $settings );
             if( !isset( $atts['decimals'] ) ) $atts['decimals'] = 2;
             if( !isset( $atts['thousand_separator'] ) ) $atts['thousand_separator'] = ',';
             if( !isset( $atts['decimal_separator'] ) ) $atts['decimal_separator'] = '.';
             if( !isset( $atts['math'] ) ) $atts['math'] = '';
-
+            if( !isset( $atts['amount_label'] ) ) $atts['amount_label'] = '';
             $result .= '<div class="super-calculator-wrapper" data-decimals="' . $atts['decimals'] . '" data-thousand-separator="' . $atts['thousand_separator'] . '" data-decimal-separator="' . $atts['decimal_separator'] . '" data-super-math="' . $atts['math'] . '">';
+            $result .= '<span class="super-calculator-label">' . $atts['amount_label'] . '</span>';
+
+            $style = '';
+            if( !isset( $atts['amount_width'] ) ) $atts['amount_width'] = 0;
+            if( $atts['amount_width']!=0 ) {
+                $style = 'width:' . $atts['amount_width'] . 'px;';
+            }
+            if( !empty( $style ) ) {
+                $style = ' style="' . $style . '"';
+            }
+            $result .= '<span' . $style . ' class="super-calculator-currency-wrapper">';
             $result .= '<span class="super-calculator-currency">' . $atts['currency'] . '</span>';
             $result .= '<span class="super-calculator-amount">' . number_format( 0, $atts['decimals'], $atts['decimal_separator'], '' ) . '</span>';
+            $result .= '</span>';
             $result .= '</div>';
 	        $result .= '<input type="hidden" class="super-shortcode-field"';
 	        $result .= ' name="' . $atts['name'] . '"';
 	        $result .= SUPER_Shortcodes::common_attributes( $atts, $tag );
 	        $result .= ' />';
-            // . $atts['value'] . '</textarea>';
 	        $result .= '</div>';
 	        $result .= SUPER_Shortcodes::loop_conditions( $atts );
 	        $result .= '</div>';
@@ -342,12 +357,19 @@ if(!class_exists('SUPER_Calculator')) :
 	                'general' => array(
 	                    'name' => __( 'General', 'super' ),
 	                    'fields' => array(
+                            'name' => SUPER_Shortcodes::name( $attributes, $default='subtotal' ),
                             'math' => array(
                                 'name'=>__( 'Calculation', 'super' ), 
                                 'desc'=>__( 'You can use tags to retrieve field values e.g: ({field1}+{field2})*7.5', 'super' ),
                                 'default'=> ( !isset( $attributes['math'] ) ? '' : $attributes['math'] ),
                                 'placeholder'=>'({field1}+{field2})*7.5',
                                 'required'=>true
+                            ),
+                            'amount_label' => array(
+                                'name'=>__( 'Amount Label', 'super' ), 
+                                'desc'=>__( 'Set a label for the amount e.g: Subtotal or Total', 'super' ),
+                                'default'=> ( !isset( $attributes['amount_label'] ) ? '' : $attributes['amount_label'] ),
+                                'placeholder'=>'',
                             ),
                             'currency' => array(
                                 'name'=>__( 'Currency', 'super' ), 
@@ -392,8 +414,6 @@ if(!class_exists('SUPER_Calculator')) :
                                     ',' => __( ', (comma)', 'super' ), 
                                 )
                             ),
-
-                            'name' => SUPER_Shortcodes::name( $attributes, $default='subtotal' ),
 	                        'email' => SUPER_Shortcodes::email( $attributes, $default='Subtotal:' ),
 	                        'label' => $label,
 	                        'description'=>$description,
@@ -424,6 +444,25 @@ if(!class_exists('SUPER_Calculator')) :
                                     'center' => 'Align Center', 
                                     'right' => 'Align Right', 
                                 ),
+                            ),
+                            'amount_width' => array(
+                                'type' => 'slider', 
+                                'default'=> (!isset($attributes['amount_width']) ? 0 : $attributes['amount_width']),
+                                'min' => 0, 
+                                'max' => 600, 
+                                'steps' => 10, 
+                                'name' => __( 'Amount wrapper width in pixels', 'super-forms' ), 
+                                'desc' => __( 'Set to 0 to use default CSS width.', 'super-forms' )
+                            ),
+                            'wrapper_width' => $wrapper_width,
+                            'margin' => array(
+                                'name'=>__( 'Remove margin', 'super-forms' ),
+                                'default'=> (!isset($attributes['margin']) ? '' : $attributes['margin']),
+                                'type'=>'select',
+                                'values'=>array(
+                                    ''=>'No',
+                                    'no_margin'=>'Yes',
+                                )
                             ),
 	                        'exclude' => $exclude,
 	                        'error_position' => $error_position,
