@@ -186,15 +186,6 @@ if(!class_exists('SUPER_Calculator')) :
         */
         public static function add_dynamic_function( $functions ) {
             
-            /*
-            SUPER.before_validating_form_hook();
-            SUPER.after_validating_form_hook();
-            SUPER.after_initializing_forms_hook();
-            SUPER.after_dropdown_change_hook();
-            SUPER.after_field_change_blur_hook();
-            SUPER.after_radio_change_hook();
-            SUPER.after_checkbox_change_hook();
-            */
             $functions['after_initializing_forms_hook'][] = array(
                 'name' => 'init_calculator'
             );
@@ -267,8 +258,8 @@ if(!class_exists('SUPER_Calculator')) :
 			$suffix         = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
             $assets_path    = str_replace( array( 'http:', 'https:' ), '', plugin_dir_url( __FILE__ ) ) . '/assets/';
             $frontend_path  = $assets_path . 'js/frontend/';
-            $array['super-jquery-calculator'] = array(
-                'src'     => $frontend_path . 'jquery.calculator.js',
+            $array['super-calculator'] = array(
+                'src'     => $frontend_path . 'calculator.min.js',
                 'deps'    => array( 'jquery', 'jquery-ui-mouse' ),
                 'version' => SUPER_Calculator()->version,
                 'footer'  => false,
@@ -277,16 +268,7 @@ if(!class_exists('SUPER_Calculator')) :
                 ),
                 'method' => 'enqueue'
             );
-            $array['super-calculator'] = array(
-                'src'     => $frontend_path . 'calculator' . $suffix . '.js',
-                'deps'    => array( 'super-jquery-calculator' ),
-                'version' => SUPER_Calculator()->version,
-                'footer'  => false,
-                'screen'  => array( 
-                    'super-forms_page_super_create_form'
-                ),
-                'method' => 'enqueue'
-            );
+           
             return $array;
         }
 
@@ -298,7 +280,7 @@ if(!class_exists('SUPER_Calculator')) :
         */
         public static function calculator( $tag, $atts, $inner, $shortcodes=null, $settings=null ) {
         	wp_enqueue_style( 'super-calculator', plugin_dir_url( __FILE__ ) . 'assets/css/frontend/calculator.min.css', array(), SUPER_Calculator()->version );
-			wp_enqueue_script( 'super-calculator', plugin_dir_url( __FILE__ ) . 'assets/js/frontend/calculator.min.js', array( 'jquery' ), SUPER_Calculator()->version );
+			wp_enqueue_script( 'super-calculator', plugin_dir_url( __FILE__ ) . 'assets/js/frontend/calculator.min.js', array( 'jquery', 'jquery-ui-mouse' ), SUPER_Calculator()->version );
             $class = ''; 
             if( !isset( $atts['margin'] ) ) $atts['margin'] = '';
             if($atts['margin']!=''){
