@@ -1,2 +1,5 @@
+May 15, 2016 - Version 1.0.1
+- Fix: eval() not handling minus sign in calculation
+
 May 3, 2016 - Version 1.0.0
 - Initial release!
