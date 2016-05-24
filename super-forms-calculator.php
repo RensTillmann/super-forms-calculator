@@ -11,7 +11,7 @@
  * Plugin Name: Super Forms Calculator
  * Plugin URI:  http://codecanyon.net/item/super-forms-drag-drop-form-builder/13979866
  * Description: Adds an extra element that allows you to do calculations on any of your fields
- * Version:     1.0.1
+ * Version:     1.0.2.1
  * Author:      feeling4design
  * Author URI:  http://codecanyon.net/user/feeling4design
 */
@@ -37,7 +37,7 @@ if(!class_exists('SUPER_Calculator')) :
          *
          *	@since		1.0.0
         */
-        public $version = '1.0.1';
+        public $version = '1.0.2.1';
 
         
         /**
@@ -324,6 +324,11 @@ if(!class_exists('SUPER_Calculator')) :
             $result .= '<span' . $style . ' class="super-calculator-currency-wrapper">';
             $result .= '<span class="super-calculator-currency">' . $atts['currency'] . '</span>';
             $result .= '<span class="super-calculator-amount">' . number_format( 0, $atts['decimals'], $atts['decimal_separator'], '' ) . '</span>';
+            
+            // @since v1.0.2
+            if( !isset( $atts['format'] ) ) $atts['format'] = '';
+            $result .= '<span class="super-calculator-format">' . $atts['format'] . '</span>';
+            
             $result .= '</span>';
             $result .= '</div>';
 	        $result .= '<input type="hidden" class="super-shortcode-field"';
@@ -369,6 +374,11 @@ if(!class_exists('SUPER_Calculator')) :
                                 'desc'=>__( 'Set a label for the amount e.g: Subtotal or Total', 'super' ),
                                 'default'=> ( !isset( $attributes['amount_label'] ) ? '' : $attributes['amount_label'] ),
                                 'placeholder'=>'',
+                            ),
+                            'format' => array(
+                                'default'=> ( !isset( $attributes['format'] ) ? '' : $attributes['format'] ),
+                                'name' => __( 'Amount format (example: %)', 'super-forms' ), 
+                                'desc' => __( 'Set a format e.g: %, EUR, USD etc.', 'super-forms' )
                             ),
                             'currency' => array(
                                 'name'=>__( 'Currency', 'super' ), 

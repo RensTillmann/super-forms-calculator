@@ -1,3 +1,7 @@
+May 24, 2016 - Version 1.0.2
+- Fix: When no tag is used inside the math also do the calculation isn't being made
+- Added: Format option to add to the calculator amount, for instance when you want to display percentages you can now use % symbol and append it after the amount
+
 May 15, 2016 - Version 1.0.1
 - Fix: eval() not handling minus sign in calculation
 
