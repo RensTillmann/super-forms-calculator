@@ -1,3 +1,6 @@
+May 26, 2016 - Version 1.0.3
+- Fix: When amount is minus, prepend the "-" sign before the currency symbol instead of after
+
 May 24, 2016 - Version 1.0.2
 - Fix: When no tag is used inside the math also do the calculation isn't being made
 - Added: Format option to add to the calculator amount, for instance when you want to display percentages you can now use % symbol and append it after the amount
