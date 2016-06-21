@@ -1,3 +1,6 @@
+June 21, 2016 - Version 1.0.5
+- Fix: Removed dependecy jquery-ui-mouse (not needed)
+
 June 14, 2016 - Version 1.0.4
 - Fix: Hook dynamic function later (after conditional logic) so the calculation is done after element is made vissible/hidden
 

@@ -11,7 +11,7 @@
  * Plugin Name: Super Forms Calculator
  * Plugin URI:  http://codecanyon.net/item/super-forms-drag-drop-form-builder/13979866
  * Description: Adds an extra element that allows you to do calculations on any of your fields
- * Version:     1.0.4
+ * Version:     1.0.5
  * Author:      feeling4design
  * Author URI:  http://codecanyon.net/user/feeling4design
 */
@@ -37,7 +37,7 @@ if(!class_exists('SUPER_Calculator')) :
          *
          *	@since		1.0.0
         */
-        public $version = '1.0.4';
+        public $version = '1.0.5';
 
         
         /**
@@ -192,7 +192,7 @@ if(!class_exists('SUPER_Calculator')) :
         */
         public static function load_frontend_scripts_before_ajax() {
             wp_enqueue_style( 'super-calculator', plugin_dir_url( __FILE__ ) . 'assets/css/frontend/calculator.min.css', array(), SUPER_Calculator()->version );
-            wp_enqueue_script( 'super-calculator', plugin_dir_url( __FILE__ ) . 'assets/js/frontend/calculator.min.js', array( 'jquery', 'super-common', 'jquery-ui-mouse' ), SUPER_Calculator()->version );
+            wp_enqueue_script( 'super-calculator', plugin_dir_url( __FILE__ ) . 'assets/js/frontend/calculator.min.js', array( 'jquery', 'super-common' ), SUPER_Calculator()->version );
         }
 
 
@@ -277,7 +277,7 @@ if(!class_exists('SUPER_Calculator')) :
             $frontend_path  = $assets_path . 'js/frontend/';
             $array['super-calculator'] = array(
                 'src'     => $frontend_path . 'calculator.min.js',
-                'deps'    => array( 'jquery', 'jquery-ui-mouse' ),
+                'deps'    => array( 'jquery' ),
                 'version' => SUPER_Calculator()->version,
                 'footer'  => false,
                 'screen'  => array( 
@@ -297,7 +297,7 @@ if(!class_exists('SUPER_Calculator')) :
         */
         public static function calculator( $tag, $atts, $inner, $shortcodes=null, $settings=null ) {
         	wp_enqueue_style( 'super-calculator', plugin_dir_url( __FILE__ ) . 'assets/css/frontend/calculator.min.css', array(), SUPER_Calculator()->version );
-			wp_enqueue_script( 'super-calculator', plugin_dir_url( __FILE__ ) . 'assets/js/frontend/calculator.min.js', array( 'jquery', 'jquery-ui-mouse' ), SUPER_Calculator()->version );
+			wp_enqueue_script( 'super-calculator', plugin_dir_url( __FILE__ ) . 'assets/js/frontend/calculator.min.js', array( 'jquery' ), SUPER_Calculator()->version );
             $class = ''; 
             if( !isset( $atts['margin'] ) ) $atts['margin'] = '';
             if($atts['margin']!=''){
