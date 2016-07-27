@@ -1,3 +1,6 @@
+July 28, 2016 - Version 1.0.6
+- Added: Possibility to calculate days between connected datepickers
+
 June 21, 2016 - Version 1.0.5
 - Fix: Removed dependecy jquery-ui-mouse (not needed)
 
