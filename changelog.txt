@@ -1,3 +1,6 @@
+July 29, 2016 - Version 1.0.7
+- Fix: When radio/checkboxes has an option that is not a number, make sure to parse it as a 0 
+
 July 28, 2016 - Version 1.0.6
 - Added: Possibility to calculate days between connected datepickers
 
