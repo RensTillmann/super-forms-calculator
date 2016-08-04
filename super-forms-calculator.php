@@ -11,7 +11,7 @@
  * Plugin Name: Super Forms Calculator
  * Plugin URI:  http://codecanyon.net/item/super-forms-drag-drop-form-builder/13979866
  * Description: Adds an extra element that allows you to do calculations on any of your fields
- * Version:     1.0.7
+ * Version:     1.0.8
  * Author:      feeling4design
  * Author URI:  http://codecanyon.net/user/feeling4design
 */
@@ -37,7 +37,7 @@ if(!class_exists('SUPER_Calculator')) :
          *
          *	@since		1.0.0
         */
-        public $version = '1.0.7';
+        public $version = '1.0.8';
 
         
         /**
@@ -143,9 +143,14 @@ if(!class_exists('SUPER_Calculator')) :
         private function init_hooks() {
             
             // Filters since 1.0.0
+            add_filter( 'super_shortcodes_after_form_elements_filter', array( $this, 'add_calculator_element' ), 10, 2 );
+            
+            // Filters since 1.0.8
+            add_filter( 'super_common_attributes_filter', array( $this, 'add_element_attribute' ), 10, 2 );
 
             // Actions since 1.0.0
-            add_filter( 'super_shortcodes_after_form_elements_filter', array( $this, 'add_calculator_element' ), 10, 2 );
+
+
 
             if ( $this->is_request( 'frontend' ) ) {
                 
@@ -170,6 +175,9 @@ if(!class_exists('SUPER_Calculator')) :
                 add_filter( 'super_enqueue_scripts', array( $this, 'add_scripts' ), 10, 1 );
                 add_filter( 'super_form_styles_filter', array( $this, 'add_element_styles' ), 10, 2 );
 
+                // Filters since 1.0.8
+                add_filter( 'super_shortcodes_after_form_elements_filter', array( $this, 'add_text_field_settings' ), 10, 2 );
+                
                 // Actions since 1.0.0
 
             }
@@ -182,6 +190,47 @@ if(!class_exists('SUPER_Calculator')) :
 
             }
             
+        }
+
+
+        /**
+         * Hook into common attributes and add return_age attribute for date element
+         *
+         *  @since      1.0.8
+        */
+        public static function add_element_attribute( $result, $element ) {
+            if( $element['tag']=='date' ) {
+                $atts = $element['atts'];
+                if( !isset( $atts['return_age'] ) ) $atts['return_age'] = '';
+                $result .= ' data-return_age="' . $atts['return_age'] . '"';
+            }
+            return $result;
+        }
+
+
+        /**
+         * Hook into settings and add Text field settings
+         *
+         *  @since      1.0.8
+        */
+        public static function add_text_field_settings( $array, $attributes ) {
+            
+            // Now add the age settings field
+            $fields_array = $array['form_elements']['shortcodes']['date']['atts']['general']['fields'];
+            $res = array_slice($fields_array, 0, 8, true);
+            $setting['return_age'] = array(
+                'desc' => __( 'Return age based on selected date to use with calculations', 'super-forms' ), 
+                'default'=> ( !isset( $attributes['return_age'] ) ? '' : $attributes['return_age'] ),
+                'type' => 'checkbox', 
+                'filter'=>true,
+                'values' => array(
+                    'true' => __( 'Return age for calculation fields', 'super-forms' ),
+                )
+            );
+            $res = $res + $setting + array_slice($fields_array, 1, count($fields_array) - 1, true);
+
+            $array['form_elements']['shortcodes']['date']['atts']['general']['fields'] = $res;
+            return $array;
         }
 
 
@@ -223,6 +272,8 @@ if(!class_exists('SUPER_Calculator')) :
             );
             return $functions;
         }
+
+
 
 
         /**

@@ -1,3 +1,7 @@
+Aug 4, 2016 - Version 1.0.8
+- Added: Option to calculate age based on datepicker field
+- Added: Option to calculate time between timepickers (returns timestamp of selected time)
+
 July 29, 2016 - Version 1.0.7
 - Fix: When radio/checkboxes has an option that is not a number, make sure to parse it as a 0 
 
