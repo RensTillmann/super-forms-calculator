@@ -1,3 +1,6 @@
+Aug 18, 2016 - Version 1.0.9
+- Fix: Issue with rounding decimals in some cases
+
 Aug 4, 2016 - Version 1.0.8
 - Added: Option to calculate age based on datepicker field
 - Added: Option to calculate time between timepickers (returns timestamp of selected time)
