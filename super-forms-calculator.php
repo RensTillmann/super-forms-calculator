@@ -405,23 +405,23 @@ if(!class_exists('SUPER_Calculator')) :
 
 	        $array['form_elements']['shortcodes']['calculator'] = array(
 	            'callback' => 'SUPER_Calculator::calculator',
-	            'name' => __( 'Calculator', 'super' ),
+	            'name' => __( 'Calculator', 'super-forms' ),
 	            'icon' => 'calculator',
 	            'atts' => array(
 	                'general' => array(
-	                    'name' => __( 'General', 'super' ),
+	                    'name' => __( 'General', 'super-forms' ),
 	                    'fields' => array(
                             'name' => SUPER_Shortcodes::name( $attributes, $default='subtotal' ),
                             'math' => array(
-                                'name'=>__( 'Calculation', 'super' ), 
-                                'desc'=>__( 'You can use tags to retrieve field values e.g: ({field1}+{field2})*7.5', 'super' ),
+                                'name'=>__( 'Calculation', 'super-forms' ), 
+                                'desc'=>__( 'You can use tags to retrieve field values e.g: ({field1}+{field2})*7.5', 'super-forms' ),
                                 'default'=> ( !isset( $attributes['math'] ) ? '' : $attributes['math'] ),
                                 'placeholder'=>'({field1}+{field2})*7.5',
                                 'required'=>true
                             ),
                             'amount_label' => array(
-                                'name'=>__( 'Amount Label', 'super' ), 
-                                'desc'=>__( 'Set a label for the amount e.g: Subtotal or Total', 'super' ),
+                                'name'=>__( 'Amount Label', 'super-forms' ), 
+                                'desc'=>__( 'Set a label for the amount e.g: Subtotal or Total', 'super-forms' ),
                                 'default'=> ( !isset( $attributes['amount_label'] ) ? '' : $attributes['amount_label'] ),
                                 'placeholder'=>'',
                             ),
@@ -431,46 +431,46 @@ if(!class_exists('SUPER_Calculator')) :
                                 'desc' => __( 'Set a format e.g: %, EUR, USD etc.', 'super-forms' )
                             ),
                             'currency' => array(
-                                'name'=>__( 'Currency', 'super' ), 
-                                'desc'=>__( 'Set the currency of or leave empty for no currency e.g: $ or €', 'super' ),
+                                'name'=>__( 'Currency', 'super-forms' ), 
+                                'desc'=>__( 'Set the currency of or leave empty for no currency e.g: $ or €', 'super-forms' ),
                                 'default'=> ( !isset( $attributes['currency'] ) ? '$' : $attributes['currency'] ),
                                 'placeholder'=>'$',
                             ),
                             'decimals' => array(
-                                'name'=>__( 'Length of decimal', 'super' ), 
-                                'desc'=>__( 'Choose a length for your decimals (default = 2)', 'super' ), 
+                                'name'=>__( 'Length of decimal', 'super-forms' ), 
+                                'desc'=>__( 'Choose a length for your decimals (default = 2)', 'super-forms' ), 
                                 'default'=> (!isset($attributes['decimals']) ? '2' : $attributes['decimals']),
                                 'type'=>'select', 
                                 'values'=>array(
-                                    '0' => __( '0 decimals', 'super' ),
-                                    '1' => __( '1 decimal', 'super' ),
-                                    '2' => __( '2 decimals', 'super' ),
-                                    '3' => __( '3 decimals', 'super' ),
-                                    '4' => __( '4 decimals', 'super' ),
-                                    '5' => __( '5 decimals', 'super' ),
-                                    '6' => __( '6 decimals', 'super' ),
-                                    '7' => __( '7 decimals', 'super' ),
+                                    '0' => __( '0 decimals', 'super-forms' ),
+                                    '1' => __( '1 decimal', 'super-forms' ),
+                                    '2' => __( '2 decimals', 'super-forms' ),
+                                    '3' => __( '3 decimals', 'super-forms' ),
+                                    '4' => __( '4 decimals', 'super-forms' ),
+                                    '5' => __( '5 decimals', 'super-forms' ),
+                                    '6' => __( '6 decimals', 'super-forms' ),
+                                    '7' => __( '7 decimals', 'super-forms' ),
                                 )
                             ),
                             'decimal_separator' => array(
-                                'name'=>__( 'Decimal separator', 'super' ), 
-                                'desc'=>__( 'Choose your decimal separator (comma or dot)', 'super' ), 
+                                'name'=>__( 'Decimal separator', 'super-forms' ), 
+                                'desc'=>__( 'Choose your decimal separator (comma or dot)', 'super-forms' ), 
                                 'default'=> (!isset($attributes['decimal_separator']) ? '.' : $attributes['decimal_separator']),
                                 'type'=>'select', 
                                 'values'=>array(
-                                    '.' => __( '. (dot)', 'super' ),
-                                    ',' => __( ', (comma)', 'super' ), 
+                                    '.' => __( '. (dot)', 'super-forms' ),
+                                    ',' => __( ', (comma)', 'super-forms' ), 
                                 )
                             ),
                             'thousand_separator' => array(
-                                'name'=>__( 'Thousand separator', 'super' ), 
-                                'desc'=>__( 'Choose your thousand separator (empty, comma or dot)', 'super' ), 
+                                'name'=>__( 'Thousand separator', 'super-forms' ), 
+                                'desc'=>__( 'Choose your thousand separator (empty, comma or dot)', 'super-forms' ), 
                                 'default'=> (!isset($attributes['thousand_separator']) ? ',' : $attributes['thousand_separator']),
                                 'type'=>'select', 
                                 'values'=>array(
-                                    '' => __( 'None (empty)', 'super' ),
-                                    '.' => __( '. (dot)', 'super' ),
-                                    ',' => __( ', (comma)', 'super' ), 
+                                    '' => __( 'None (empty)', 'super-forms' ),
+                                    '.' => __( '. (dot)', 'super-forms' ),
+                                    ',' => __( ', (comma)', 'super-forms' ), 
                                 )
                             ),
 	                        'email' => SUPER_Shortcodes::email( $attributes, $default='Subtotal:' ),
@@ -478,20 +478,20 @@ if(!class_exists('SUPER_Calculator')) :
 	                        'description'=>$description,
 				            'tooltip' => $tooltip,
                             'validation' => array(
-                                'name'=>__( 'Special Validation', 'super' ), 
-                                'desc'=>__( 'How does this field need to be validated?', 'super' ), 
+                                'name'=>__( 'Special Validation', 'super-forms' ), 
+                                'desc'=>__( 'How does this field need to be validated?', 'super-forms' ), 
                                 'default'=> (!isset($attributes['validation']) ? 'none' : $attributes['validation']),
                                 'type'=>'select', 
                                 'values'=>array(
-                                    'none' => __( 'No validation needed', 'super' ),
-                                    'empty' => __( 'Not empty', 'super' ), 
+                                    'none' => __( 'No validation needed', 'super-forms' ),
+                                    'empty' => __( 'Not empty', 'super-forms' ), 
                                 )
                             ),
 	                        'error' => $error,
 	                    ),
 	                ),
 	                'advanced' => array(
-	                    'name' => __( 'Advanced', 'super' ),
+	                    'name' => __( 'Advanced', 'super-forms' ),
 	                    'fields' => array(
 	                        'grouped' => $grouped,
                             'align' => array(
@@ -528,7 +528,7 @@ if(!class_exists('SUPER_Calculator')) :
 	                    ),
 	                ),
 	                'icon' => array(
-	                    'name' => __( 'Icon', 'super' ),
+	                    'name' => __( 'Icon', 'super-forms' ),
 	                    'fields' => array(
 	                        'icon_position' => $icon_position,
 	                        'icon_align' => $icon_align,
