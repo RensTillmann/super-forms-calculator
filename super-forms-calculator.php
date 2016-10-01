@@ -11,7 +11,7 @@
  * Plugin Name: Super Forms Calculator
  * Plugin URI:  http://codecanyon.net/item/super-forms-drag-drop-form-builder/13979866
  * Description: Adds an extra element that allows you to do calculations on any of your fields
- * Version:     1.1.1
+ * Version:     1.1.2
  * Author:      feeling4design
  * Author URI:  http://codecanyon.net/user/feeling4design
 */
@@ -37,7 +37,7 @@ if(!class_exists('SUPER_Calculator')) :
          *
          *	@since		1.0.0
         */
-        public $version = '1.1.1';
+        public $version = '1.1.2';
 
         
         /**
@@ -177,7 +177,7 @@ if(!class_exists('SUPER_Calculator')) :
                 add_filter( 'super_common_js_dynamic_functions_filter', array( $this, 'add_dynamic_function' ), 110, 2 );
 
                 // Filters since 1.0.8
-                add_filter( 'super_shortcodes_after_form_elements_filter', array( $this, 'add_text_field_settings' ), 10, 2 );
+                add_filter( 'super_shortcodes_after_form_elements_filter', array( $this, 'add_date_field_settings' ), 10, 2 );
                 
                 // Actions since 1.0.0
 
@@ -214,7 +214,7 @@ if(!class_exists('SUPER_Calculator')) :
          *
          *  @since      1.0.8
         */
-        public static function add_text_field_settings( $array, $attributes ) {
+        public static function add_date_field_settings( $array, $attributes ) {
             
             // Now add the age settings field
             $fields_array = $array['form_elements']['shortcodes']['date']['atts']['general']['fields'];
@@ -271,6 +271,12 @@ if(!class_exists('SUPER_Calculator')) :
             $functions['after_checkbox_change_hook'][] = array(
                 'name' => 'init_calculator'
             );
+
+            // @since 1.1.2
+            $functions['after_form_data_collected_hook'][] = array(
+                'name' => 'init_calculator_update_data_value'
+            );
+
             return $functions;
         }
 
@@ -383,6 +389,12 @@ if(!class_exists('SUPER_Calculator')) :
             $result .= '</div>';
 	        $result .= '<input type="hidden" class="super-shortcode-field"';
 	        $result .= ' name="' . $atts['name'] . '"';
+
+            // @since v1.1.2
+            if( (isset($atts['email_float'])) && ($atts['email_float']=='true') ) {
+                $result .= ' data-email-float="true"';
+            }
+
 	        $result .= SUPER_Shortcodes::common_attributes( $atts, $tag );
 	        $result .= ' />';
 	        $result .= '</div>';
@@ -473,6 +485,15 @@ if(!class_exists('SUPER_Calculator')) :
                                     ',' => __( ', (comma)', 'super-forms' ), 
                                 )
                             ),
+                            'email_float' => array(
+                                'desc' => __( 'This will remove the thousand separater from the number', 'super-forms' ), 
+                                'default'=> ( !isset( $attributes['email_value'] ) ? '' : $attributes['email_value'] ),
+                                'type' => 'checkbox', 
+                                'filter'=>true,
+                                'values' => array(
+                                    'true' => __( 'Send/Save the value as a float format', 'super-forms' ),
+                                )
+                            ),                            
 	                        'email' => SUPER_Shortcodes::email( $attributes, $default='Subtotal:' ),
 	                        'label' => $label,
 	                        'description'=>$description,
