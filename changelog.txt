@@ -1,3 +1,7 @@
+Oct 7, 2016 - Version 1.1.4
+- Fix: Issue with variable fields and calculations incorrect order resulting in wrong calculations
+- Added: new JS hook: after_init_calculator_hook
+
 Oct 5, 2016 - Version 1.1.3
 - Added: Compatibility for automatically updating calculations (math) in dynamic fields (add more +)
 
