@@ -496,7 +496,8 @@ if(!class_exists('SUPER_Calculator')) :
                                 )
                             ),
                             'email_float' => array(
-                                'desc' => __( 'This will remove the thousand separater from the number', 'super-forms' ), 
+                                'desc' => __( 'This will remove the thousand separater from the number (enable this for WooCommerce Checkouts)', 'super-forms' ), 
+                                'labe' => __( 'Also needed for WooCommerce Checkouts', 'super-forms' ),
                                 'default'=> ( !isset( $attributes['email_value'] ) ? '' : $attributes['email_value'] ),
                                 'type' => 'checkbox', 
                                 'filter'=>true,

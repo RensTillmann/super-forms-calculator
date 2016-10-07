@@ -1,5 +1,6 @@
-Oct 7, 2016 - Version 1.1.4
+Oct 8, 2016 - Version 1.1.4
 - Fix: Issue with variable fields and calculations incorrect order resulting in wrong calculations
+- Fix: If calculator element is hidden based on conditional logic skip the email float method
 - Added: new JS hook: after_init_calculator_hook
 
 Oct 5, 2016 - Version 1.1.3
