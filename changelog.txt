@@ -1,3 +1,6 @@
+Oct 12, 2016 - Version 1.1.5
+- Fix: Javascript compatibility issue with Safari browser
+
 Oct 8, 2016 - Version 1.1.4
 - Fix: Issue with variable fields and calculations incorrect order resulting in wrong calculations
 - Fix: If calculator element is hidden based on conditional logic skip the email float method
