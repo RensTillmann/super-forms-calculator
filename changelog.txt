@@ -1,4 +1,4 @@
-Oct 23, 2016 - Version 1.1.8
+Oct 25, 2016 - Version 1.1.8
 - Added: Math regular expression e.g: {tag_*} (contains search), {tag_^} (starts with search), {tag_$} (ends with search)
 
 Oct 20, 2016 - Version 1.1.7
