@@ -1,17 +1,17 @@
 <?php
 /**
- * Super Forms Calculator
+ * Super Forms - Calculator
  *
- * @package   Super Forms Calculator
+ * @package   Super Forms - Calculator
  * @author    feeling4design
  * @link      http://codecanyon.net/item/super-forms-drag-drop-form-builder/13979866
  * @copyright 2015 by feeling4design
  *
  * @wordpress-plugin
- * Plugin Name: Super Forms Calculator
+ * Plugin Name: Super Forms - Calculator
  * Plugin URI:  http://codecanyon.net/item/super-forms-drag-drop-form-builder/13979866
  * Description: Adds an extra element that allows you to do calculations on any of your fields
- * Version:     1.1.9
+ * Version:     1.2.0
  * Author:      feeling4design
  * Author URI:  http://codecanyon.net/user/feeling4design
 */
@@ -37,9 +37,18 @@ if(!class_exists('SUPER_Calculator')) :
          *
          *	@since		1.0.0
         */
-        public $version = '1.1.9';
+        public $version = '1.2.0';
 
+
+        /**
+         * @var string
+         *
+         *  @since      1.2.0
+        */
+        public $add_on_slug = 'calculator';
+        public $add_on_name = 'Calculator';
         
+
         /**
          * @var SUPER_Calculator The single instance of the class
          *
@@ -142,14 +151,17 @@ if(!class_exists('SUPER_Calculator')) :
         */
         private function init_hooks() {
             
+            // @since 1.2.0
+            register_deactivation_hook( __FILE__, array( $this, 'deactivate' ) );
+
             // Filters since 1.0.0
             add_filter( 'super_shortcodes_after_form_elements_filter', array( $this, 'add_calculator_element' ), 10, 2 );
             
             // Filters since 1.0.8
             add_filter( 'super_common_attributes_filter', array( $this, 'add_element_attribute' ), 10, 2 );
-
-            // Actions since 1.0.0
-
+            
+            // Filters since 1.2.0
+            add_filter( 'super_after_activation_message_filter', array( $this, 'activation_message' ), 10, 2 ); 
 
 
             if ( $this->is_request( 'frontend' ) ) {
@@ -165,7 +177,6 @@ if(!class_exists('SUPER_Calculator')) :
                         add_action( 'wp_enqueue_scripts', array( $this, 'load_frontend_scripts_before_ajax' ) );
                     }
                 }
-
             }
             
             if ( $this->is_request( 'admin' ) ) {
@@ -179,15 +190,8 @@ if(!class_exists('SUPER_Calculator')) :
                 // Filters since 1.0.8
                 add_filter( 'super_shortcodes_after_form_elements_filter', array( $this, 'add_date_field_settings' ), 10, 2 );
                 
-                // Actions since 1.0.0
-
-            }
-            
-            if ( $this->is_request( 'ajax' ) ) {
-
-                // Filters since 1.0.0
-
-                // Actions since 1.0.0
+                // Filters since 1.2.0
+                add_filter( 'super_settings_end_filter', array( $this, 'activation' ), 100, 2 );
 
             }
             
@@ -292,6 +296,48 @@ if(!class_exists('SUPER_Calculator')) :
 
 
         /**
+         * Add the activation under the "Activate" TAB
+         * 
+         * @since       1.2.0
+        */
+        public function activation($array, $data) {
+            if (method_exists('SUPER_Forms','add_on_activation_message')) {
+                return SUPER_Forms::add_on_activation($array, $this->add_on_slug, $this->add_on_name);
+            }else{
+                return $array;
+            }
+        }
+
+
+        /**  
+         *  Deactivate
+         *
+         *  Upon plugin deactivation delete activation
+         *
+         *  @since      1.2.0
+         */
+        public static function deactivate(){
+            if (method_exists('SUPER_Forms','add_on_activation_message')) {
+                SUPER_Forms::add_on_deactivate($this->add_on_slug);
+            }
+        }
+
+
+        /**
+         * Check license and show activation message
+         * 
+         * @since       1.2.0
+        */
+        public function activation_message( $activation_msg, $data ) {
+            if (method_exists('SUPER_Forms','add_on_activation_message')) {
+                return SUPER_Forms::add_on_activation_message($activation_msg, $this->add_on, $this->add_on_name);
+            }else{
+                return $activation_msg;
+            }
+        }
+
+
+        /**
          * Hook into stylesheets of the form and add styles for the calculator element
          *
          *  @since      1.0.0
@@ -376,7 +422,16 @@ if(!class_exists('SUPER_Calculator')) :
             if( !isset( $atts['decimal_separator'] ) ) $atts['decimal_separator'] = '.';
             if( !isset( $atts['math'] ) ) $atts['math'] = '';
             if( !isset( $atts['amount_label'] ) ) $atts['amount_label'] = '';
-            $result .= '<div class="super-calculator-wrapper" data-decimals="' . $atts['decimals'] . '" data-thousand-separator="' . $atts['thousand_separator'] . '" data-decimal-separator="' . $atts['decimal_separator'] . '" data-super-math="' . $atts['math'] . '">';
+
+            // @since 1.2.0 - return years, months or days for date calculations
+            if( !isset( $atts['date_calculations'] ) ) $atts['date_calculations'] = '';
+            if($atts['date_calculations']=='true'){
+                if( !isset( $atts['date_math'] ) ) $atts['date_math'] = 'years';
+            }else{
+                $atts['date_math'] = '';
+            }
+
+            $result .= '<div class="super-calculator-wrapper"' . ($atts['date_math']!='' ? ' data-date-math="' . $atts['date_math'] . '"' : '') . ' data-decimals="' . $atts['decimals'] . '" data-thousand-separator="' . $atts['thousand_separator'] . '" data-decimal-separator="' . $atts['decimal_separator'] . '" data-super-math="' . $atts['math'] . '">';
             $result .= '<span class="super-calculator-label">' . $atts['amount_label'] . '</span>';
 
             $style = '';
@@ -457,7 +512,27 @@ if(!class_exists('SUPER_Calculator')) :
                                 'desc'=>__( 'Set the currency of or leave empty for no currency e.g: $ or €', 'super-forms' ),
                                 'default'=> ( !isset( $attributes['currency'] ) ? '$' : $attributes['currency'] ),
                                 'placeholder'=>'$',
+                            ),                            
+	                        'email' => SUPER_Shortcodes::email( $attributes, $default='Subtotal:' ),
+	                        'label' => $label,
+	                        'description'=>$description,
+				            'tooltip' => $tooltip,
+                            'validation' => array(
+                                'name'=>__( 'Special Validation', 'super-forms' ), 
+                                'desc'=>__( 'How does this field need to be validated?', 'super-forms' ), 
+                                'default'=> (!isset($attributes['validation']) ? 'none' : $attributes['validation']),
+                                'type'=>'select', 
+                                'values'=>array(
+                                    'none' => __( 'No validation needed', 'super-forms' ),
+                                    'empty' => __( 'Not empty', 'super-forms' ), 
+                                )
                             ),
+	                        'error' => $error,
+	                    ),
+	                ),
+	                'advanced' => array(
+	                    'name' => __( 'Advanced', 'super-forms' ),
+	                    'fields' => array(
                             'decimals' => array(
                                 'name'=>__( 'Length of decimal', 'super-forms' ), 
                                 'desc'=>__( 'Choose a length for your decimals (default = 2)', 'super-forms' ), 
@@ -496,35 +571,40 @@ if(!class_exists('SUPER_Calculator')) :
                                 )
                             ),
                             'email_float' => array(
-                                'desc' => __( 'This will remove the thousand separater from the number (enable this for WooCommerce Checkouts)', 'super-forms' ), 
-                                'labe' => __( 'Also needed for WooCommerce Checkouts', 'super-forms' ),
+                                'desc' => __( 'This will remove the thousand separater from the number', 'super-forms' ), 
+                                'label' => __( 'Required for WooCommerce Checkouts', 'super-forms' ),
                                 'default'=> ( !isset( $attributes['email_value'] ) ? '' : $attributes['email_value'] ),
                                 'type' => 'checkbox', 
                                 'filter'=>true,
                                 'values' => array(
                                     'true' => __( 'Send/Save the value as a float format', 'super-forms' ),
                                 )
-                            ),                            
-	                        'email' => SUPER_Shortcodes::email( $attributes, $default='Subtotal:' ),
-	                        'label' => $label,
-	                        'description'=>$description,
-				            'tooltip' => $tooltip,
-                            'validation' => array(
-                                'name'=>__( 'Special Validation', 'super-forms' ), 
-                                'desc'=>__( 'How does this field need to be validated?', 'super-forms' ), 
-                                'default'=> (!isset($attributes['validation']) ? 'none' : $attributes['validation']),
-                                'type'=>'select', 
-                                'values'=>array(
-                                    'none' => __( 'No validation needed', 'super-forms' ),
-                                    'empty' => __( 'Not empty', 'super-forms' ), 
+                            ),
+
+                            // @since 1.2.0 - return years, months or days for math
+                            'date_calculations' => array(
+                                'desc' => __( 'This allows you return the age, months or days based on the birthdate', 'super-forms' ), 
+                                'default'=> ( !isset( $attributes['date_calculations'] ) ? '' : $attributes['date_calculations'] ),
+                                'type' => 'checkbox', 
+                                'filter'=>true,
+                                'values' => array(
+                                    'true' => __( 'Enable birthdate calculations', 'super-forms' ),
                                 )
                             ),
-	                        'error' => $error,
-	                    ),
-	                ),
-	                'advanced' => array(
-	                    'name' => __( 'Advanced', 'super-forms' ),
-	                    'fields' => array(
+                            'date_math' => array(
+                                'name'=>__( 'Select which value to return for calculations', 'super-forms' ), 
+                                'default'=> (!isset($attributes['date_math']) ? 'years' : $attributes['date_math']),
+                                'type'=>'select',
+                                'values'=>array(
+                                    'years' => __( 'Return years (age)', 'super-forms' ),
+                                    'months' => __( 'Return months', 'super-forms' ),
+                                    'days' => __( 'Return days', 'super-forms' ),
+                                ),
+                                'filter'=>true,
+                                'parent'=>'date_calculations',
+                                'filter_value'=>'true',
+                            ),
+
 	                        'grouped' => $grouped,
                             'align' => array(
                                 'name'=> __('Alignment', 'super-forms' ),
