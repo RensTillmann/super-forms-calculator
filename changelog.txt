@@ -1,3 +1,6 @@
+Nov 21, 2016 - Version 1.2.0
+- Added: Option to return years, months or days for date pickers (birthdate / age calculations)
+
 Nov 9, 2016 - Version 1.1.9
 - Fix: When previous calculator contains invalid math make sure to return true instead of false (prevents other calculators from being executed)
 
