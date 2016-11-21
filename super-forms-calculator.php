@@ -346,7 +346,7 @@ if(!class_exists('SUPER_Calculator')) :
         */
         public function activation_message( $activation_msg, $data ) {
             if (method_exists('SUPER_Forms','add_on_activation_message')) {
-                return SUPER_Forms::add_on_activation_message($activation_msg, $this->add_on, $this->add_on_name);
+                return SUPER_Forms::add_on_activation_message($activation_msg, $this->add_on_slug, $this->add_on_name);
             }else{
                 return $activation_msg;
             }
