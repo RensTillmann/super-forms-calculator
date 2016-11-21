@@ -193,8 +193,24 @@ if(!class_exists('SUPER_Calculator')) :
                 // Filters since 1.2.0
                 add_filter( 'super_settings_end_filter', array( $this, 'activation' ), 100, 2 );
 
+                // Actions since 1.2.0
+                add_action( 'init', array( $this, 'update_plugin' ) );
+
             }
             
+        }
+
+
+        /**
+         * Automatically update plugin from the repository
+         *
+         *  @since      1.2.0
+        */
+        function update_plugin() {
+            require_once ( SUPER_PLUGIN_DIR . '/includes/admin/update-super-forms.php' );
+            $plugin_remote_path = 'http://f4d.nl/super-forms/';
+            $plugin_slug = plugin_basename( __FILE__ );
+            new SUPER_WP_AutoUpdate( $this->version, $plugin_remote_path, $plugin_slug, '', '', $this->add_on_slug );
         }
 
 

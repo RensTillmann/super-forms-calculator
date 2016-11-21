@@ -1,4 +1,5 @@
 Nov 21, 2016 - Version 1.2.0
+- Added: Automatic updates
 - Added: Option to return years, months or days for date pickers (birthdate / age calculations)
 
 Nov 9, 2016 - Version 1.1.9
