@@ -20,7 +20,7 @@
 	text-align: right;
 }
 .super-field.super-calculator .super-field-wrapper {
-	float:initial;
+	float:none;
 	margin:auto;
 	width:auto;
 	display: inline-block;

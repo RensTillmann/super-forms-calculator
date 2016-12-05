@@ -1,3 +1,6 @@
+Dec 5, 2016 - Version 1.2.1
+- Fix: Issue with align center in Internet Explorer
+
 Nov 21, 2016 - Version 1.2.0
 - Added: Automatic updates
 - Added: Option to return years, months or days for date pickers (birthdate / age calculations)
