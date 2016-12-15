@@ -1,4 +1,5 @@
-Dec 5, 2016 - Version 1.2.1
+Dec 15, 2016 - Version 1.3.0
+- Added: Compatibility for currency field
 - Fix: Issue with align center in Internet Explorer
 
 Nov 21, 2016 - Version 1.2.0
