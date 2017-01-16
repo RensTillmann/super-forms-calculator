@@ -11,7 +11,7 @@
  * Plugin Name: Super Forms - Calculator
  * Plugin URI:  http://codecanyon.net/item/super-forms-drag-drop-form-builder/13979866
  * Description: Adds an extra element that allows you to do calculations on any of your fields
- * Version:     1.3.3
+ * Version:     1.3.4
  * Author:      feeling4design
  * Author URI:  http://codecanyon.net/user/feeling4design
 */
@@ -37,7 +37,7 @@ if(!class_exists('SUPER_Calculator')) :
          *
          *	@since		1.0.0
         */
-        public $version = '1.3.3';
+        public $version = '1.3.4';
 
 
         /**
@@ -449,7 +449,11 @@ if(!class_exists('SUPER_Calculator')) :
                 $atts['date_math'] = '';
             }
 
-            $result .= '<div class="super-calculator-wrapper"' . ($atts['date_math']!='' ? ' data-date-math="' . $atts['date_math'] . '"' : '') . ' data-decimals="' . $atts['decimals'] . '" data-thousand-separator="' . $atts['thousand_separator'] . '" data-decimal-separator="' . $atts['decimal_separator'] . '" data-super-math="' . $atts['math'] . '">';
+            // @since 2.3.0 - speed improvement, only do calculations for applied fields
+            preg_match_all('/{\K[^}]*(?=})/m', $atts['math'], $matches);
+            $fields = implode(',', $matches[0]);
+
+            $result .= '<div class="super-calculator-wrapper" data-fields="' . $fields . ',"' . ($atts['date_math']!='' ? ' data-date-math="' . $atts['date_math'] . '"' : '') . ' data-decimals="' . $atts['decimals'] . '" data-thousand-separator="' . $atts['thousand_separator'] . '" data-decimal-separator="' . $atts['decimal_separator'] . '" data-super-math="' . $atts['math'] . '">';
             $result .= '<span class="super-calculator-label">' . $atts['amount_label'] . '</span>';
 
             $style = '';
