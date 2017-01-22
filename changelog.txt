@@ -1,3 +1,6 @@
+Jan 23, 2017 - Version 1.4.2
+- Fix: first update the data fields attribute to make sure regex tags are replaced with according field names.
+
 Jan 18, 2017 - Version 1.4.0
 - Improved: Calculator math execution
 - Improved: Overal code optimization
