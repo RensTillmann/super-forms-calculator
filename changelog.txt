@@ -1,3 +1,7 @@
+Jan 24, 2017 - Version 1.4.5
+- Fix: update the data fields attribute after duplicating a column
+- Fix: update the data fields attribute to make sure regex tags are replaced with according field names
+
 Jan 24, 2017 - Version 1.4.3
 - Fix: when replacing math with values make sure to not update other tags if they contain the string of another tag / field name
 
