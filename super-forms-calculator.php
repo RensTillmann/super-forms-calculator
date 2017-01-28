@@ -275,9 +275,10 @@ if(!class_exists('SUPER_Calculator')) :
         */
         public static function add_dynamic_function( $functions ) {
             
-            $functions['after_initializing_forms_hook'][] = array(
-                'name' => 'init_calculator'
-            );
+            //$functions['after_initializing_forms_hook'][] = array(
+            //    'name' => 'init_calculator'
+            //);
+            
             $functions['before_validating_form_hook'][] = array(
                 'name' => 'init_calculator'
             );
