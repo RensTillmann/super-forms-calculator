@@ -1,7 +1,5 @@
-Feb 06, 2017 - Version 1.5.2
-- Fix: Small issue when skipping calculator fields when it actually shouldn't skip (issue since speed improvement update)
-
-Jan 26, 2017 - Version 1.5.1
+Feb 06, 2017 - Version 1.6.0
+- Improved: Speed, skipping fields that have been triggered previously by the same changed field when calling JS hook: after_field_change_blur_hook()
 - Fix: Do not skip static math calculations the first time the form loads (these won't be triggered if conditional hidden on page load)
 
 Jan 25, 2017 - Version 1.5.0
