@@ -1,3 +1,6 @@
+Feb 09, 2017 - Version 1.6.1
+- Improved: Set $form variable based on changed field after deleting a dynamic column
+
 Feb 06, 2017 - Version 1.6.0
 - Improved: Speed, skipping fields that have been triggered previously by the same changed field when calling JS hook: after_field_change_blur_hook()
 - Fix: Do not skip static math calculations the first time the form loads (these won't be triggered if conditional hidden on page load)
