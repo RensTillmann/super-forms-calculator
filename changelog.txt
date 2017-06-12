@@ -1,3 +1,6 @@
+Jun 12, 2017 - Version 1.6.3
+- Fix: Calculations problem inside multi-part, JS selector should focus on the whole form instead of just the multi-part itself
+
 Feb 09, 2017 - Version 1.6.1
 - Improved: Set $form variable based on changed field after deleting a dynamic column
 
