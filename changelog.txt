@@ -1,4 +1,7 @@
-Aug 14, 2017 - Version 1.7.0
+Okt 03, 2017 - Version 1.7.1
+- Fix: replaced .data('value') with .attr('data-value') because data is no longer being used to save the calculator value
+
+Sep 01, 2017 - Version 1.7.0
 - Added: checkbox and radio buttons compatibility with advanced tags like {field;2} etc.
 - Improved: Set $form variable based on changed field after deleting a dynamic column
 - Fix: due to IE 11 bug fix for checkboxes js script was updated to keep checkbox calculations working with super forms
