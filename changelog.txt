@@ -1,4 +1,7 @@
-Okt 03, 2017 - Version 1.7.1
+Oct 16, 2017 - Version 1.8.0
+- Changed: made plugin ready for Envato Elements
+
+Oct 03, 2017 - Version 1.7.1
 - Fix: replaced .data('value') with .attr('data-value') because data is no longer being used to save the calculator value
 
 Sep 01, 2017 - Version 1.7.0
