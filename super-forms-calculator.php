@@ -209,7 +209,7 @@ if(!class_exists('SUPER_Calculator')) :
          *
          *  @since      1.8.0
         */
-        public static function display_activation_msg() {
+        public function display_activation_msg() {
             $sac = get_option( 'sac_' . $this->add_on_slug, 0 );
             if( $sac!=1 ) {
                 echo '<div class="notice notice-error">'; // notice-success
