@@ -1,3 +1,6 @@
+Oct 25, 2017 - Version 1.8.1
+- Fix: Using $this when not in object context
+
 Oct 16, 2017 - Version 1.8.0
 - Changed: made plugin ready for Envato Elements
 - Fix: replaced .data('value') with .attr('data-value') because data is no longer being used to save the calculator value
