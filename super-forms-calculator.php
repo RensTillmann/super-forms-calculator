@@ -210,6 +210,20 @@ if(!class_exists('SUPER_Calculator')) :
          *  @since      1.8.0
         */
         public function display_activation_msg() {
+            if( !class_exists('SUPER_Forms') ) {
+                echo '<div class="notice notice-error">'; // notice-success
+                    echo '<p>';
+                    echo sprintf( 
+                        __( '%sPlease note:%s You must install and activate %4$s%1$sSuper Forms%2$s%5$s in order to be able to use %1$s%s%2$s!', 'super_forms' ), 
+                        '<strong>', 
+                        '</strong>', 
+                        'Super Forms - ' . $this->add_on_name, 
+                        '<a target="_blank" href="https://codecanyon.net/item/super-forms-drag-drop-form-builder/13979866">', 
+                        '</a>' 
+                    );
+                    echo '</p>';
+                echo '</div>';
+            }
             $sac = get_option( 'sac_' . $this->add_on_slug, 0 );
             if( $sac!=1 ) {
                 echo '<div class="notice notice-error">'; // notice-success
