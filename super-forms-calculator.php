@@ -456,11 +456,47 @@ if(!class_exists('SUPER_Calculator')) :
          *  @since      1.0.0
         */
         public static function calculator( $tag, $atts, $inner, $shortcodes=null, $settings=null ) {
-        	wp_enqueue_style( 'super-calculator', plugin_dir_url( __FILE__ ) . 'assets/css/frontend/calculator.min.css', array(), SUPER_Calculator()->version );
+            
+            // Fallback check for older super form versions
+            if (method_exists('SUPER_Common','generate_array_default_element_settings')) {
+                $defaults = SUPER_Common::generate_array_default_element_settings($shortcodes, 'form_elements', $tag);
+            }else{
+                $defaults = array(
+                    'name' => 'subtotal',
+                    'math' => '',
+                    'amount_label' => '',
+                    'format' => '',
+                    'currency' => '$',
+                    'email' => 'Subtotal:',
+                    'label' => '',
+                    'description' => '',
+                    'tooltip' => '',
+                    'validation' => 'none',
+                    'error' => '',
+                    'decimals' => '2',
+                    'decimal_separator' => '.',
+                    'thousand_separator' => ',',
+                    'email_float' => '',
+                    'date_calculations' => '',
+                    'date_math' => 'years',
+                    'grouped' => 0,
+                    'align' => 'left',
+                    'amount_width' => 0,
+                    'wrapper_width' => 0,
+                    'margin' => '',
+                    'exclude' => 0,
+                    'error_position' => '',
+                    'icon_position' => 'outside',
+                    'icon_align' => 'left',
+                    'icon' => 'calculator',
+                );
+            }
+            $atts = wp_parse_args( $atts, $defaults );
+
+            wp_enqueue_style( 'super-calculator', plugin_dir_url( __FILE__ ) . 'assets/css/frontend/calculator.min.css', array(), SUPER_Calculator()->version );
 			wp_enqueue_script( 'super-calculator', plugin_dir_url( __FILE__ ) . 'assets/js/frontend/calculator.min.js', array( 'jquery' ), SUPER_Calculator()->version );
             $class = ''; 
-            if( !isset( $atts['margin'] ) ) $atts['margin'] = '';
-            if($atts['margin']!=''){
+            if( $atts['margin']!='' ) {
                 $class = 'super-remove-margin'; 
             }
             $result = SUPER_Shortcodes::opening_tag( $tag, $atts, $class );
@@ -532,15 +568,34 @@ if(!class_exists('SUPER_Calculator')) :
             // Include the predefined arrays
             require( SUPER_PLUGIN_DIR . '/includes/shortcodes/predefined-arrays.php' );
 
+            $array['form_elements']['shortcodes']['calculator_predefined'] = array(
+                'name' => __( 'Calculator', 'super-forms' ),
+                'icon' => 'calculator',
+                'predefined' => array(
+                    array(
+                        'tag' => 'calculator',
+                        'group' => 'form_elements',
+                        'data' => array(
+                            'name' => __( 'subtotal', 'super-forms' ),
+                            'email' => __( 'Subtotal:', 'super-forms' ),
+                            'currency' => '$',
+                            'icon' => 'calculator',
+                        )
+                    )            
+                )
+            );
+
 	        $array['form_elements']['shortcodes']['calculator'] = array(
-	            'callback' => 'SUPER_Calculator::calculator',
+	            'hidden' => true,
+                'callback' => 'SUPER_Calculator::calculator',
 	            'name' => __( 'Calculator', 'super-forms' ),
 	            'icon' => 'calculator',
 	            'atts' => array(
 	                'general' => array(
 	                    'name' => __( 'General', 'super-forms' ),
 	                    'fields' => array(
-                            'name' => SUPER_Shortcodes::name( $attributes, $default='subtotal' ),
+                            'name' => SUPER_Shortcodes::name( $attributes, '' ),
+                            'email' => SUPER_Shortcodes::email( $attributes, '' ),
                             'math' => array(
                                 'name'=>__( 'Calculation', 'super-forms' ), 
                                 'desc'=>__( 'You can use tags to retrieve field values e.g: ({field1}+{field2})*7.5', 'super-forms' ),
@@ -562,10 +617,9 @@ if(!class_exists('SUPER_Calculator')) :
                             'currency' => array(
                                 'name'=>__( 'Currency', 'super-forms' ), 
                                 'desc'=>__( 'Set the currency of or leave empty for no currency e.g: $ or €', 'super-forms' ),
-                                'default'=> ( !isset( $attributes['currency'] ) ? '$' : $attributes['currency'] ),
+                                'default'=> ( !isset( $attributes['currency'] ) ? '' : $attributes['currency'] ),
                                 'placeholder'=>'$',
                             ),                            
-	                        'email' => SUPER_Shortcodes::email( $attributes, $default='Subtotal:' ),
 	                        'label' => $label,
 	                        'description'=>$description,
 				            'tooltip' => $tooltip,
