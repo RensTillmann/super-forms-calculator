@@ -1,3 +1,6 @@
+Jan 21, 2017 - Version 1.8.3
+- Added: option "Do not save field in Contact Entry"
+
 Nov 16, 2017 - Version 1.8.2
 - Changed: Auto updates for Envato element users
 
