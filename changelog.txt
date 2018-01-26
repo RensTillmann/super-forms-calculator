@@ -1,4 +1,5 @@
-Jan 21, 2017 - Version 1.8.3
+Jan 26, 2018 - Version 1.8.4
+- Fix: Whenever advanced tags are used in combination with regex $, ^, *, e.g {$field;2} do a different replace method to get the correct math in return
 - Added: option "Do not save field in Contact Entry"
 
 Nov 16, 2017 - Version 1.8.2
