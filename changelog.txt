@@ -1,5 +1,6 @@
 Jan 30, 2018 - Version 1.8.5
 - Added: Ability to retrieve correct value from variable field value that used advanced tags format eg: value1;value2;value3
+- Improved: Make sure replacement of tags inside dynamic column is executed after all fields have been renamed inside the newly duplicated column
 
 Jan 26, 2018 - Version 1.8.4
 - Fix: Whenever advanced tags are used in combination with regex $, ^, *, e.g {$field;2} do a different replace method to get the correct math in return
