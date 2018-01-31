@@ -674,7 +674,8 @@ if(!class_exists('SUPER_Calculator')) :
                                     '' => __( 'None (empty)', 'super-forms' ),
                                     '.' => __( '. (dot)', 'super-forms' ),
                                     ',' => __( ', (comma)', 'super-forms' ), 
-                                )
+                                ),
+                                'allow_empty' => true, // For backward compatibility with older forms
                             ),
                             'email_float' => array(
                                 'desc' => __( 'This will remove the thousand separater from the number', 'super-forms' ), 
