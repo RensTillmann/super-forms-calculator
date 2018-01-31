@@ -579,6 +579,7 @@ if(!class_exists('SUPER_Calculator')) :
                             'name' => __( 'subtotal', 'super-forms' ),
                             'email' => __( 'Subtotal:', 'super-forms' ),
                             'currency' => '$',
+                            'thousand_separator' => ',',
                             'icon' => 'calculator',
                         )
                     )
@@ -668,14 +669,13 @@ if(!class_exists('SUPER_Calculator')) :
                             'thousand_separator' => array(
                                 'name'=>__( 'Thousand separator', 'super-forms' ), 
                                 'desc'=>__( 'Choose your thousand separator (empty, comma or dot)', 'super-forms' ), 
-                                'default'=> (!isset($attributes['thousand_separator']) ? ',' : $attributes['thousand_separator']),
+                                'default'=> (!isset($attributes['thousand_separator']) ? '' : $attributes['thousand_separator']),
                                 'type'=>'select', 
                                 'values'=>array(
                                     '' => __( 'None (empty)', 'super-forms' ),
                                     '.' => __( '. (dot)', 'super-forms' ),
                                     ',' => __( ', (comma)', 'super-forms' ), 
-                                ),
-                                'allow_empty' => true, // For backward compatibility with older forms
+                                )
                             ),
                             'email_float' => array(
                                 'desc' => __( 'This will remove the thousand separater from the number', 'super-forms' ), 
