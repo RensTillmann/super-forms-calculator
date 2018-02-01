@@ -489,9 +489,38 @@ if(!class_exists('SUPER_Calculator')) :
                     'icon_position' => 'outside',
                     'icon_align' => 'left',
                     'icon' => 'calculator',
+
+                    // @since 1.8.5
+                    'convert_timestamp' => '',
+                    'date_format' => 'dd-mm-yy',
+                    'custom_format' => 'dd-mm-yy',
                 );
             }
             $atts = wp_parse_args( $atts, $defaults );
+
+            // @since 1.8.5
+            if( !empty($atts['convert_timestamp']) ) {
+                $format = $atts['date_format'];
+                if( $format=='custom' ) $format = $atts['custom_format'];
+
+                $jsformat = $format;
+                $jsformat = str_replace('DD', 'dddd', $jsformat);
+                if (preg_match("/MM/i", $jsformat)) {
+                    $jsformat = str_replace('MM', 'MMMM', $jsformat);
+                }else{
+                    if (preg_match("/M/i", $jsformat)) {
+                        $jsformat = str_replace('M', 'MMM', $jsformat);
+                    }
+                }
+                $jsformat = str_replace('mm', 'MM', $jsformat);
+                if (preg_match("/yy/i", $jsformat)) {
+                    $jsformat = str_replace('yy', 'yyyy', $jsformat);
+                }else{
+                    if (preg_match("/y/i", $jsformat)) {
+                        $jsformat = str_replace('y', 'yy', $jsformat);
+                    }
+                }
+            }
 
             wp_enqueue_style( 'super-calculator', plugin_dir_url( __FILE__ ) . 'assets/css/frontend/calculator.min.css', array(), SUPER_Calculator()->version );
 			wp_enqueue_script( 'super-calculator', plugin_dir_url( __FILE__ ) . 'assets/js/frontend/calculator.min.js', array( 'jquery' ), SUPER_Calculator()->version );
@@ -519,7 +548,10 @@ if(!class_exists('SUPER_Calculator')) :
             preg_match_all('/{\K[^}]*(?=})/m', $atts['math'], $matches);
             $fields = implode('][', $matches[0]);
 
-            $result .= '<div class="super-calculator-wrapper" data-fields="[' . $fields . ']"' . ($atts['date_math']!='' ? ' data-date-math="' . $atts['date_math'] . '"' : '') . ' data-decimals="' . $atts['decimals'] . '" data-thousand-separator="' . $atts['thousand_separator'] . '" data-decimal-separator="' . $atts['decimal_separator'] . '" data-super-math="' . $atts['math'] . '">';
+            $result .= '<div class="super-calculator-wrapper" data-fields="[' . $fields . ']"' . ($atts['date_math']!='' ? ' data-date-math="' . $atts['date_math'] . '"' : '') . ' data-decimals="' . $atts['decimals'] . '" data-thousand-separator="' . $atts['thousand_separator'] . '" data-decimal-separator="' . $atts['decimal_separator'] . '" data-super-math="' . $atts['math'] . '"';
+            if(!empty($jsformat)) $result .= ' data-jsformat="' . $jsformat . '" ';
+            $result .= '">';
+
             $result .= '<span class="super-calculator-label">' . $atts['amount_label'] . '</span>';
 
             $style = '';
@@ -710,6 +742,41 @@ if(!class_exists('SUPER_Calculator')) :
                                 'filter'=>true,
                                 'parent'=>'date_calculations',
                                 'filter_value'=>'true',
+                            ),
+
+                            // @since 1.8.5 - return date format based on timestamps
+                            'convert_timestamp' => array(
+                                'default'=> ( !isset( $attributes['convert_timestamp'] ) ? '' : $attributes['convert_timestamp'] ),
+                                'type' => 'checkbox', 
+                                'filter'=>true,
+                                'values' => array(
+                                    'true' => __( 'Convert timestamp to specific date format', 'super-forms' ),
+                                ),
+                            ),
+                            'date_format' => array(
+                                'name'=>__( 'Date Format', 'super-forms' ), 
+                                'desc'=>__( 'Change the date format', 'super-forms' ), 
+                                'default'=> ( !isset( $attributes['date_format']) ? 'dd-mm-yy' : $attributes['date_format']),
+                                'type'=>'select', 
+                                'values'=>array(
+                                    'custom' => __( 'Custom date format', 'super-forms' ),
+                                    'dd-mm-yy' => __( 'European - dd-mm-yy', 'super-forms' ),
+                                    'mm/dd/yy' => __( 'Default - mm/dd/yy', 'super-forms' ),
+                                    'yy-mm-dd' => __( 'ISO 8601 - yy-mm-dd', 'super-forms' ),
+                                    'd M, y' => __( 'Short - d M, y', 'super-forms' ),
+                                    'd MM, y' => __( 'Medium - d MM, y', 'super-forms' ),
+                                    'DD, d MM, yy' => __( 'Full - DD, d MM, yy', 'super-forms' ),
+                                ),
+                                'filter'=>true,
+                                'parent'=>'convert_timestamp',
+                                'filter_value'=>'true',
+                            ),
+                            'custom_format' => array(
+                                'name'=>'Enter a custom Date Format',
+                                'default'=> ( !isset( $attributes['custom_format']) ? 'dd-mm-yy' : $attributes['custom_format']),
+                                'filter'=>true,
+                                'parent'=>'date_format',
+                                'filter_value'=>'custom',
                             ),
 
 	                        'grouped' => $grouped,
