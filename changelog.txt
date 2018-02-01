@@ -1,5 +1,7 @@
-Jan 30, 2018 - Version 1.8.5
+Feb 01, 2018 - Version 1.8.6
 - Added: Option to return date based on a timestamp value
+
+Jan 30, 2018 - Version 1.8.5
 - Added: Ability to retrieve correct value from variable field value that used advanced tags format eg: value1;value2;value3
 - Improved: Make sure replacement of tags inside dynamic column is executed after all fields have been renamed inside the newly duplicated column
 

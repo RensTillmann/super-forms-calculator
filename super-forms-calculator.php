@@ -11,7 +11,7 @@
  * Plugin Name: Super Forms - Calculator
  * Plugin URI:  http://codecanyon.net/item/super-forms-drag-drop-form-builder/13979866
  * Description: Adds an extra element that allows you to do calculations on any of your fields
- * Version:     1.8.5
+ * Version:     1.8.6
  * Author:      feeling4design
  * Author URI:  http://codecanyon.net/user/feeling4design
 */
@@ -37,7 +37,7 @@ if(!class_exists('SUPER_Calculator')) :
          *
          *	@since		1.0.0
         */
-        public $version = '1.8.5';
+        public $version = '1.8.6';
 
 
         /**
@@ -490,7 +490,7 @@ if(!class_exists('SUPER_Calculator')) :
                     'icon_align' => 'left',
                     'icon' => 'calculator',
 
-                    // @since 1.8.5
+                    // @since 1.8.6
                     'convert_timestamp' => '',
                     'date_format' => 'dd-mm-yy',
                     'custom_format' => 'dd-mm-yy',
@@ -498,7 +498,7 @@ if(!class_exists('SUPER_Calculator')) :
             }
             $atts = wp_parse_args( $atts, $defaults );
 
-            // @since 1.8.5
+            // @since 1.8.6
             if( !empty($atts['convert_timestamp']) ) {
                 $format = $atts['date_format'];
                 if( $format=='custom' ) $format = $atts['custom_format'];
@@ -744,7 +744,7 @@ if(!class_exists('SUPER_Calculator')) :
                                 'filter_value'=>'true',
                             ),
 
-                            // @since 1.8.5 - return date format based on timestamps
+                            // @since 1.8.6 - return date format based on timestamps
                             'convert_timestamp' => array(
                                 'default'=> ( !isset( $attributes['convert_timestamp'] ) ? '' : $attributes['convert_timestamp'] ),
                                 'type' => 'checkbox', 
