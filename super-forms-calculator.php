@@ -819,7 +819,7 @@ if(!class_exists('SUPER_Calculator')) :
 	                    'fields' => array(
 	                        'icon_position' => $icon_position,
 	                        'icon_align' => $icon_align,
-	                        'icon' => SUPER_Shortcodes::icon( $attributes, 'calculator' ),
+	                        'icon' => SUPER_Shortcodes::icon( $attributes, '' ),
 	                    ),
 	                ),
 	                'conditional_logic' => $conditional_logic_array

@@ -1,5 +1,6 @@
 Feb 20, 2018 - Version 1.8.7
 - Fix: $clone undefined JS error
+- Fix: Allow icon to be empty
 
 Feb 01, 2018 - Version 1.8.6
 - Added: Option to return date based on a timestamp value
