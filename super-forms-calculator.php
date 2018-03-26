@@ -11,7 +11,7 @@
  * Plugin Name: Super Forms - Calculator
  * Plugin URI:  http://codecanyon.net/item/super-forms-drag-drop-form-builder/13979866
  * Description: Adds an extra element that allows you to do calculations on any of your fields
- * Version:     1.8.7
+ * Version:     1.8.8
  * Author:      feeling4design
  * Author URI:  http://codecanyon.net/user/feeling4design
 */
@@ -37,7 +37,7 @@ if(!class_exists('SUPER_Calculator')) :
          *
          *	@since		1.0.0
         */
-        public $version = '1.8.7';
+        public $version = '1.8.8';
 
 
         /**
@@ -676,17 +676,10 @@ if(!class_exists('SUPER_Calculator')) :
                                 'name'=>__( 'Length of decimal', 'super-forms' ), 
                                 'desc'=>__( 'Choose a length for your decimals (default = 2)', 'super-forms' ), 
                                 'default'=> (!isset($attributes['decimals']) ? '2' : $attributes['decimals']),
-                                'type'=>'select', 
-                                'values'=>array(
-                                    '0' => __( '0 decimals', 'super-forms' ),
-                                    '1' => __( '1 decimal', 'super-forms' ),
-                                    '2' => __( '2 decimals', 'super-forms' ),
-                                    '3' => __( '3 decimals', 'super-forms' ),
-                                    '4' => __( '4 decimals', 'super-forms' ),
-                                    '5' => __( '5 decimals', 'super-forms' ),
-                                    '6' => __( '6 decimals', 'super-forms' ),
-                                    '7' => __( '7 decimals', 'super-forms' ),
-                                )
+                                'type'=>'slider', 
+                                'min'=>0,
+                                'max'=>50,
+                                'steps'=>1
                             ),
                             'decimal_separator' => array(
                                 'name'=>__( 'Decimal separator', 'super-forms' ), 

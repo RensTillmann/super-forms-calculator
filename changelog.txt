@@ -1,3 +1,6 @@
+Mar 26, 2018 - Version 1.8.8
+- Added: Abillity to give a custom amount for decimals
+
 Feb 20, 2018 - Version 1.8.7
 - Fix: $clone undefined JS error
 - Fix: Allow icon to be empty
